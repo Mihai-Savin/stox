@@ -3,10 +3,14 @@ package com.mihaisavin.stox.domain;
 public class Alarm {
     private boolean active;
     private String symbol;
-    long originalValue;
-    int variance;
+    private double originalValue;
+    /**
+     * percent of increase(+value) or decrease(-value)
+     * relative to the original value
+     */
+    private int variance;
 
-    public Alarm(String symbol, long originalValue, int variance){
+    public Alarm(String symbol, double originalValue, int variance){
         active = true;
         this.symbol = symbol;
         this.originalValue = originalValue;
@@ -21,7 +25,7 @@ public class Alarm {
         this.symbol = symbol;
     }
 
-    public long getOriginalValue() {
+    public double getOriginalValue() {
         return originalValue;
     }
 
