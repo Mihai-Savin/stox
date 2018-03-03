@@ -1,6 +1,6 @@
 package com.mihaisavin.stox.domain;
 
-public class Alarm {
+public class Alarm extends AbstractModel {
     private boolean active;
     private String symbol;
     private double originalValue;

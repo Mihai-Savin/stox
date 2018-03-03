@@ -16,7 +16,7 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping("/app")
+    @RequestMapping("/test")
     ModelAndView app() {
 
         ModelAndView modelAndView = new ModelAndView("app");
