@@ -1,6 +1,12 @@
 package com.mihaisavin.stox.domain;
 
+import javax.persistence.*;
+
+@MappedSuperclass
 public abstract class AbstractModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private long id;
 
     public long getId() {
