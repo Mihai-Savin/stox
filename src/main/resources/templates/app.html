@@ -25,7 +25,7 @@
 
 <div class="container">
 
-    <ol class="breadcrumb">
+    <ul class="breadcrumb">
         <li class="active">
             <form th:action="@{/logout}" method="post">
                 <input type="submit" value="Sign Out"/>
@@ -34,7 +34,7 @@
 
         <h1 th:inline="text">hello [[${#httpServletRequest.remoteUser}]]!</h1>
 
-    </ol>
+    </ul>
 
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -48,7 +48,7 @@
                 </form>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/alert?action=add"><span
+                    <li><a href="/app/alarm?action=add"><span
                             class="glyphicon glyphicon-plus" aria-hidden="true">&nbspAdd alarm</span></a></li>
 
                 </ul>
@@ -63,13 +63,13 @@
     <!-- Table -->
     <table class="table">
         <tr>
-            <th>Symbol</th>
-            <th>Original price</th>
-            <th>Current price</th>
-            <th>Variation [%]</th>
-            <th>Target</th>
-            <th>Target [%]</th>
-            <th>Active</th>
+            <th>Symbol----------</th>
+            <th>Original price--</th>
+            <th>Current price---</th>
+            <th>Variation [%]---</th>
+            <th>Target-----</th>
+            <th>Target [%]-</th>
+            <th>Active---</th>
             <th>&nbsp;</th>
         </tr>
         <tbody id="alarmsList">
@@ -81,7 +81,10 @@
             <td th:text="${{alarm.originalValue * (100 + alarm.variance)/100}}"></td>
             <td th:text="${{alarm.variance}}"></td>
             <td th:text="${{alarm.active}}"></td>
-            <td>Edit&nbspDelete</td>
+            <td>
+                <a href="/app/alarm?action=edit">edit</a>&nbsp
+                <a href="/app/alarm?action=delete">delete</a>
+            </td>
         </tr>
         </tbody>
 

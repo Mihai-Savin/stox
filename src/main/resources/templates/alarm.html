@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Create your alarm</title>
+</head>
+<body>
+
+<form th:action="@{/app/alarm}" method="post" th:object="${alarm}">
+    <label>Stock to Watch</label><br/>
+
+    <select name="symbol" placeholder="symbol"
+            th:value="${alarm.symbol}">
+
+        <option>-Select a Stock to track-</option>
+
+        <option selected="selected" value="MSFT">MSFT</option>
+        <option value="AAPL">AAPL</option>
+        <option value="GOOGL">GOOGL</option>
+        <option value="FB">FB</option>
+        <option value="TWTR">TWTR</option>
+        <option value="INTC">INTC</option>
+        <option value="CSCO">CSCO</option>
+        <option value="ORCL">ORCL</option>
+        <option value="NVDA">NVDA</option>
+        <option value="IBM">IBM</option>
+        <option value="SAP">SAP</option>
+        <option value="TXN">TXN</option>
+        <option value="ADBE">ADBE</option>
+        <option value="QCOM">QCOM</option>
+        <option value="BIDU">BIDU</option>
+        <option value="AABA">AABA</option>
+        <option value="NOK">NOK</option>
+        <option value="EA">EA</option>
+        <option value="HPQ">HPQ</option>
+
+    </select>
+
+    <div><label> Original value: <input type="text" name="originalValue" value=100 placeholder="originalValue"
+                                        th:value="${alarm.originalValue}"/> </label></div>
+    <div><label> Variance % : <input type="text" name="variance" value=5 laceholder="variance"
+                                     th:value="${alarm.variance}"/> </label></div>
+
+
+    <label>Additional notes</label><br/>
+    <textarea value="Add your notes here..." rows="7"
+              name="notes" field="">
+    </textarea>
+
+    <div><input type="submit" value="Save Alarm"/></div>
+</form>
+</body>
+</html>

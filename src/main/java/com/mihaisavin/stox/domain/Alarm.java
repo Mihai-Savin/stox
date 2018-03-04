@@ -1,5 +1,8 @@
 package com.mihaisavin.stox.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Alarm extends AbstractModel {
     private boolean active;
     private String symbol;
@@ -9,6 +12,9 @@ public class Alarm extends AbstractModel {
      * relative to the original value
      */
     private int variance;
+
+    public Alarm() {
+    }
 
     public Alarm(String symbol, double originalValue, int variance){
         active = true;
@@ -45,7 +51,7 @@ public class Alarm extends AbstractModel {
         return active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setActive() {
+        this.active = true;
     }
 }

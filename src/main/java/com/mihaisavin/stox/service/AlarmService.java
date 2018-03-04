@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,10 +57,16 @@ public class AlarmService {
         dao.update(alarm);
     }
 
+    public Collection<String> getWatchedSymbols() {
+        return dao.getWatchedSymbols();
+    }
+
     private void validate(Alarm alarm) throws ValidationException {
         List<String> errors = new LinkedList<String>();
 
         //TODO validation code
+
+        alarm.setActive();
 
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.toArray(new String[]{}));
