@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class Alarm extends AbstractModel {
+    private long ownerId;
     private boolean active;
     private String symbol;
     private double originalValue;
@@ -53,5 +54,13 @@ public class Alarm extends AbstractModel {
 
     public void setActive() {
         this.active = true;
+    }
+
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
     }
 }
