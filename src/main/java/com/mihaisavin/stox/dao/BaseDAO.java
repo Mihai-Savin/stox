@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public interface BaseDAO<T extends AbstractModel> {
 
-    Collection<T> getAll();
+    Collection<T> getAll(long param);
 
     T findById(Long id);
 
