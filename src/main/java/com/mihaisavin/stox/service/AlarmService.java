@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/rest/alarms")
@@ -20,9 +21,24 @@ public class AlarmService {
     @Autowired
     private AlarmDAO dao;
 
+    @Autowired
+    StockService stockService;
+
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Alarm> getAllAlarms() {
-        return dao.getAll();
+    public Collection<Alarm> getAllAlarms(long userId) {
+        Collection<Alarm> alarms = dao.getAll(userId);
+        if (alarms.size() > 0) updateWithNowValues(alarms);
+
+        return alarms;
+    }
+
+    private void updateWithNowValues(Collection<Alarm> alarms) {
+        Collection<String> watchedSymbols = getWatchedSymbols();
+        Map<String, Long> stockData = stockService.getStockData(watchedSymbols);
+
+        for (Alarm alarm : alarms) {
+            alarm.setNowValue(stockData.get(alarm.getSymbol()));
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "query")
@@ -66,10 +82,45 @@ public class AlarmService {
 
         //TODO validation code
 
-        alarm.setActive();
+        //didn't wanna loose too much time with thymeleaf's stupid checkbox
+        if (alarm.getState().equals("enabled")) {
+            alarm.setActive();
+        } else {
+            alarm.setInactive();
+        }
+
+        if (alarm.getId() == 0 && alarm.getOriginalValue() == 0) {
+            Map<String, Long> stockData = stockService.getStockData(alarm.getSymbol());
+            alarm.setOriginalValue(stockData.get(alarm.getSymbol()));
+            alarm.setActive();
+        } else if (alarm.getOriginalValue() == 0) {
+            double unchanged = get(alarm.getId()).getOriginalValue();
+            alarm.setOriginalValue(unchanged);
+        }
+
 
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.toArray(new String[]{}));
         }
     }
+
+    public Collection<Alarm> getActiveAlarms() {
+        return dao.getActiveAlarms();
+    }
+
+    public double getAlarmThreshold(Alarm alarm) {
+        return alarm.getOriginalValue() * (100 + alarm.getVariance()) / 100;
+    }
+
+    public void disableAlarm(long id) {
+        Alarm alarm = get(id);
+        alarm.setInactive();
+
+        try {
+            save(alarm);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
