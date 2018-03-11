@@ -1,9 +1,13 @@
 package com.mihaisavin.stox.web;
 
 import com.mihaisavin.stox.domain.Alarm;
+import com.mihaisavin.stox.domain.User;
 import com.mihaisavin.stox.domain.ValidationException;
 import com.mihaisavin.stox.service.AlarmService;
+import com.mihaisavin.stox.service.EmailService;
+import com.mihaisavin.stox.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,35 +24,60 @@ public class AlarmController {
     @Autowired
     private AlarmService alarmService;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("")
-    public ModelAndView index() {
-        Collection<Alarm> alarms = alarmService.getAllAlarms();
+    public ModelAndView index(@AuthenticationPrincipal User user) {
+
+        long userId = user.getId();
+
+        Collection<Alarm> alarms = alarmService.getAllAlarms(userId);
+        Alarm newAlarm = new Alarm();
 
         ModelAndView modelAndView = new ModelAndView("app");
         modelAndView.addObject("alarmsList", alarms);
+        modelAndView.addObject("alarm", newAlarm);
 
         return modelAndView;
     }
 
-    @RequestMapping(value="/alarm", method = RequestMethod.GET, params = "action=add")
+    @RequestMapping(value = "/alarm", method = RequestMethod.GET, params = "action=add")
     public ModelAndView addAlarm() {
-        return new ModelAndView("alarm").addObject( new Alarm());
+        Alarm alarm = new Alarm();
+        return new ModelAndView("alarm").addObject(alarm);
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "action=edit")
-    public String editAlarm(@RequestParam("id") Long id) {
-        return "alarm";
+    @RequestMapping(value = "/alarm", method = RequestMethod.GET, params = "action=edit")
+    public ModelAndView editAlarm(@RequestParam("id") Long id) {
+        Alarm alarm = alarmService.get(id);
+        return new ModelAndView("alarm").addObject(alarm);
     }
 
-    @RequestMapping(value="/alarm", method = RequestMethod.POST)
-    public ModelAndView saveAlarm(@ModelAttribute Alarm alarm){
+    @RequestMapping(value = "/alarm", method = RequestMethod.GET, params = "action=delete")
+    public ModelAndView deleteAlarm(@AuthenticationPrincipal User user, @RequestParam("id") Long id) {
+        alarmService.delete(id);
+        return index(user);
+    }
+
+    @RequestMapping(value = "/alarm", method = RequestMethod.POST)
+    public ModelAndView saveAlarm(@AuthenticationPrincipal User user, @ModelAttribute Alarm alarm) {
+        alarm.setOwnerId(user.getId());
+
         try {
             alarmService.save(alarm);
         } catch (ValidationException e) {
             e.printStackTrace();
-            return addAlarm();
+            return editAlarm(alarm.getId());
         }
 
-        return index();
+        emailService.sendEmail(userService.getEmailByUserId(user.getId()),
+                "Alarm for " + alarm.getSymbol() + " has been set at " +
+                        alarm.getOriginalValue() * (100 + alarm.getVariance()) / 100);
+
+        return index(user);
     }
 }
