@@ -34,7 +34,7 @@ public class AlarmService {
 
     private void updateWithNowValues(Collection<Alarm> alarms) {
         Collection<String> userSymbols = getSymbols(alarms);
-        Map<String, Long> stockData = stockService.getStockData(userSymbols);
+        Map<String, Double> stockData = stockService.getStockData(userSymbols);
 
         for (Alarm alarm : alarms) {
             alarm.setNowValue(stockData.get(alarm.getSymbol()));
@@ -87,7 +87,7 @@ public class AlarmService {
         }
 
         if (alarm.getId() == 0 && alarm.getOriginalValue() == 0) {
-            Map<String, Long> stockData = stockService.getStockData(alarm.getSymbol());
+            Map<String, Double> stockData = stockService.getStockData(alarm.getSymbol());
             alarm.setOriginalValue(stockData.get(alarm.getSymbol()));
             alarm.setActive();
         } else if (alarm.getOriginalValue() == 0) {

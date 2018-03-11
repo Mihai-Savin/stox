@@ -7,5 +7,4 @@ public interface AlarmDAO extends BaseDAO<Alarm>  {
     Collection<Alarm> searchByName(String query);
     Collection<String> getWatchedSymbols();
     Collection<Alarm> getActiveAlarms();
-    Alarm getAlarmByName (String alarmName);
 }

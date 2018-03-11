@@ -96,13 +96,13 @@ public class StoxEngine {
 
     private void doWork() {
         LOGGER.info("Working [fetching quotes]...");
-        Map<String, Long> stocksMap = stockService.getStocks();
+        Map<String, Double> stocksMap = stockService.getStocks();
 
         Collection<Alarm> activeAlarms = alarmService.getActiveAlarms();
 
         LOGGER.info("Working [evaluating]...");
         for (Alarm alarm : activeAlarms) {
-            Long currentValue = stocksMap.get(alarm.getSymbol());
+            Double currentValue = stocksMap.get(alarm.getSymbol());
             int variance = alarm.getVariance();
             double threshold = alarmService.getAlarmThreshold(alarm);
 
@@ -111,7 +111,7 @@ public class StoxEngine {
                 String alarmOwnersEmail = userService.getEmailByUserId(alarm.getOwnerId());
 
                 emailService.sendEmail(alarmOwnersEmail, "Symbol " + alarm.getSymbol() + " has reached" +
-                        " targeted value of " + threshold + ".");
+                        " targeted value of " + threshold + ". Original value was " + alarm.getOriginalValue() + ".");
                 alarmService.disableAlarm(alarm.getId());
             }
         }
