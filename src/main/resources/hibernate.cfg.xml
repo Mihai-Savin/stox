@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+        <!--Used to create schema in DB-->
+        <!--validate: validate the schema, makes no changes to the database.-->
+        <!--update: update the schema.-->
+        <!--create: creates the schema, destroying previous data.-->
+        <!--create-drop: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped.-->
+        <property name="hbm2ddl.auto">update</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/stox</property>
+        <!--For now we use the admin credentials-->
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">postgres</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+
+        <!--Used for current session context. Needs more documenting.-->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!--The XML-way-->
+        <!--<mapping resource="com/mihaisavin/stox/domain/Alarm.hbm.xml"/>-->
+
+        <!--Mapping setting used in tandem with @Entity JPA annotation-->
+        <mapping class="com.mihaisavin.stox.domain.Alarm"/>
+        <mapping class="com.mihaisavin.stox.domain.User"/>
+        <mapping class="com.mihaisavin.stox.config.AppConfig"/>
+
+
+        <!--<property name="show_sql">true</property>-->
+    </session-factory>
+
+</hibernate-configuration>
