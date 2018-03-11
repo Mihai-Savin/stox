@@ -24,8 +24,8 @@ public class StockDAO {
     private String API_KEY = "demo";
     private final String DEMO_SYMBOLS_SECTION = "MSFT,FB,AAPL";
 
-    public Map<String, Long> getStockData(Collection<String> symbols) {
-        LOGGER.info("Getting batch stock quote(s) for " + symbols.size() + "symbols...");
+    public Map<String, Double> getStockData(Collection<String> symbols) {
+        LOGGER.info("Getting batch stock quote(s) for " + symbols.size() + " symbols...");
 
         StringBuilder response = new StringBuilder("");
         JsonNode rootNode = null;
@@ -56,7 +56,7 @@ public class StockDAO {
 
             String output;
 
-            LOGGER.info("Output from Server .... \n");
+            LOGGER.info("Output from Server ....");
             while ((output = br.readLine()) != null) {
                 response.append(output);
                 LOGGER.info(output);
@@ -90,14 +90,14 @@ public class StockDAO {
         return extractQuotes(rootNode);
     }
 
-    private Map<String, Long> extractQuotes(JsonNode rootNode) {
-        Map<String, Long> result = new HashMap<>();
+    private Map<String, Double> extractQuotes(JsonNode rootNode) {
+        Map<String, Double> result = new HashMap<>();
 
         JsonNode stockQuotes = rootNode.get("Stock Quotes");
         int size = stockQuotes.size();
         for (int i = 0; i < size; i++)
             result.put(stockQuotes.get(i).get("1. symbol").textValue(),
-                       stockQuotes.get(i).get("2. price").asLong());
+                       stockQuotes.get(i).get("2. price").asDouble());
 
         return result;
     }
