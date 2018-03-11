@@ -35,7 +35,7 @@ public class StoxApplicationTests {
 
 	@Test
 	public void checkGetThreeStockDataGoldenPath() {
-		List<String> checkedSymbols = Arrays.asList("MSFT", "AAPL", "ORCL");
+		List<String> checkedSymbols = Arrays.asList("MSFT", "FB", "AAPL");
 
 		Map<String, Double> stockData = stockService.getStockData(checkedSymbols);
 
@@ -58,7 +58,7 @@ public class StoxApplicationTests {
 		String checkedSymbol = "noValidSymbol";
 		Map<String, Double> stockData = stockService.getStockData(checkedSymbol);
 
-		Assert.assertEquals(0, stockData.size());
+		Assert.assertFalse(stockData.containsKey(checkedSymbol));
 	}
 
 }

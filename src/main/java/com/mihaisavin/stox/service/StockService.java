@@ -39,7 +39,7 @@ public class StockService {
 
         stockData = getStockData(alarmService.getWatchedSymbols());
 
-        LOGGER.info("Data for " + stockData.size() + "was fetched.");
+        LOGGER.info("Data for " + stockData.size() + " symbols was fetched.");
 
         return stockData;
     }
