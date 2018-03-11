@@ -22,7 +22,7 @@ public class AlarmService {
     private AlarmDAO dao;
 
     @Autowired
-    StockService stockService;
+    private StockService stockService;
 
     @RequestMapping(method = RequestMethod.GET)
     public Collection<Alarm> getAllAlarms(long userId) {
@@ -33,8 +33,8 @@ public class AlarmService {
     }
 
     private void updateWithNowValues(Collection<Alarm> alarms) {
-        Collection<String> watchedSymbols = getWatchedSymbols();
-        Map<String, Long> stockData = stockService.getStockData(watchedSymbols);
+        Collection<String> userSymbols = getSymbols(alarms);
+        Map<String, Long> stockData = stockService.getStockData(userSymbols);
 
         for (Alarm alarm : alarms) {
             alarm.setNowValue(stockData.get(alarm.getSymbol()));
@@ -80,9 +80,6 @@ public class AlarmService {
     private void validate(Alarm alarm) throws ValidationException {
         List<String> errors = new LinkedList<String>();
 
-        //TODO validation code
-
-        //didn't wanna loose too much time with thymeleaf's stupid checkbox
         if (alarm.getState().equals("enabled")) {
             alarm.setActive();
         } else {
@@ -94,10 +91,11 @@ public class AlarmService {
             alarm.setOriginalValue(stockData.get(alarm.getSymbol()));
             alarm.setActive();
         } else if (alarm.getOriginalValue() == 0) {
+            //we don't have the original value in the editing form
+            //so we need to fetch it
             double unchanged = get(alarm.getId()).getOriginalValue();
             alarm.setOriginalValue(unchanged);
         }
-
 
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.toArray(new String[]{}));
@@ -115,12 +113,23 @@ public class AlarmService {
     public void disableAlarm(long id) {
         Alarm alarm = get(id);
         alarm.setInactive();
+        alarm.setState("reached target");
 
         try {
             save(alarm);
         } catch (ValidationException e) {
             e.printStackTrace();
         }
+    }
+
+    private Collection<String> getSymbols(Collection<Alarm> alarms) {
+        List<String> symbolsList = new LinkedList<>();
+
+        for (Alarm alarm : alarms) {
+            symbolsList.add(alarm.getSymbol());
+        }
+
+        return symbolsList;
     }
 
 }
