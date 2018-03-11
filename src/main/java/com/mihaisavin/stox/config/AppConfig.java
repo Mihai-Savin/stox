@@ -15,6 +15,9 @@ public class AppConfig extends AbstractModel {
     private boolean startEngine;
     private int pollingInterval;
     private boolean sendEmails;
+    private String emailsSenderAccount;
+    private String emailsSenderPassword;
+    private String apiKey;
 
     public boolean isStartEngine() {
         return startEngine;
@@ -48,6 +51,30 @@ public class AppConfig extends AbstractModel {
         this.sendEmails = sendEmails;
     }
 
+    public String getEmailsSenderAccount() {
+        return emailsSenderAccount;
+    }
+
+    public void setEmailsSenderAccount(String emailsSenderAccount) {
+        this.emailsSenderAccount = emailsSenderAccount;
+    }
+
+    public String getEmailsSenderPassword() {
+        return emailsSenderPassword;
+    }
+
+    public void setEmailsSenderPassword(String emailsSenderPassword) {
+        this.emailsSenderPassword = emailsSenderPassword;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     @Override
     public String toString() {
         return super.toString() + name + " & " +
@@ -55,4 +82,5 @@ public class AppConfig extends AbstractModel {
                 "polling interval (seconds): " + pollingInterval + " & " +
                 "isSendEmails: " + sendEmails;
     }
+
 }
