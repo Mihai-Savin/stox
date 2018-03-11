@@ -13,15 +13,23 @@ public class Alarm extends AbstractModel {
      * relative to the original value
      */
     private int variance;
+    private String state;
+    @Transient
+    private double nowValue;
 
     public Alarm() {
+        super();
+        active = false;
+        state = "created";
+        variance = 1; //percent
     }
 
     public Alarm(String symbol, double originalValue, int variance){
-        active = true;
+        this();
         this.symbol = symbol;
         this.originalValue = originalValue;
         this.variance = variance;
+        this.nowValue = originalValue;
     }
 
     public String getSymbol() {
@@ -36,7 +44,7 @@ public class Alarm extends AbstractModel {
         return originalValue;
     }
 
-    public void setOriginalValue(long originalValue) {
+    public void setOriginalValue(double originalValue) {
         this.originalValue = originalValue;
     }
 
@@ -55,6 +63,9 @@ public class Alarm extends AbstractModel {
     public void setActive() {
         this.active = true;
     }
+    public void setInactive() {
+        this.active = false;
+    }
 
     public long getOwnerId() {
         return ownerId;
@@ -63,4 +74,24 @@ public class Alarm extends AbstractModel {
     public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public double getNowValue() {
+        return nowValue;
+    }
+
+    public void setNowValue(double nowValue) {
+        this.nowValue = nowValue;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
 }
