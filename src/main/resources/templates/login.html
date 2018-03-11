@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:text-align="http://www.w3.org/1999/xhtml">
 <head>
     <title>Login page</title>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+          rel="stylesheet" media="screen"/>
+
 </head>
 <body>
 <div th:if="${param.error}">
@@ -11,10 +15,10 @@
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<form th:action="@{/login}" method="post">
-    <div><label> Email <br>     <input type="text" name="username"/> </label></div>
-    <div><label> Password <br> <input type="password" name="password"/> </label></div> <br>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+    <form th:action="@{/login}" method="post">
+        <div><label> Email <br>     <input class="form-control" type="text" name="username"/> </label></div>
+        <div><label> Password <br> <input class="form-control" type="password" name="password"/> </label></div> <br>
+        <div><input class="btn btn-default" type="submit" value="Sign In"/></div>
+    </form>
 </body>
 </html>

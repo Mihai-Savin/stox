@@ -1,53 +1,42 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:enabled="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
+
+<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+      rel="stylesheet" media="screen"/>
+
 <head>
-    <title>Create your alarm</title>
+    <title>Edit your alarm</title>
 </head>
 <body>
 
 <form th:action="@{/app/alarm}" method="post" th:object="${alarm}">
-    <label>Stock to Watch</label><br/>
 
-    <select name="symbol" placeholder="symbol"
-            th:value="${alarm.symbol}">
-
-        <option>-Select a Stock to track-</option>
-
-        <option selected="selected" value="MSFT">MSFT</option>
-        <option value="AAPL">AAPL</option>
-        <option value="GOOGL">GOOGL</option>
-        <option value="FB">FB</option>
-        <option value="TWTR">TWTR</option>
-        <option value="INTC">INTC</option>
-        <option value="CSCO">CSCO</option>
-        <option value="ORCL">ORCL</option>
-        <option value="NVDA">NVDA</option>
-        <option value="IBM">IBM</option>
-        <option value="SAP">SAP</option>
-        <option value="TXN">TXN</option>
-        <option value="ADBE">ADBE</option>
-        <option value="QCOM">QCOM</option>
-        <option value="BIDU">BIDU</option>
-        <option value="AABA">AABA</option>
-        <option value="NOK">NOK</option>
-        <option value="EA">EA</option>
-        <option value="HPQ">HPQ</option>
-
+    <select class="btn btn-default" name="state" placeholder="state"
+            th:value="${alarm.state}">
+        <option value="enabled">ENABLED</option>
+        <option value="disabled">DISABLED</option>
     </select>
+    <br><br>
+    <div><label> Variance % : <input class="btn btn-default" type="number" name="variance" value=5 placeholder="variance"
+        th:value="${alarm.variance}"/> </label></div>
+    <br>
 
-    <div><label> Original value: <input type="text" name="originalValue" value=100 placeholder="originalValue"
-                                        th:value="${alarm.originalValue}"/> </label></div>
-    <div><label> Variance % : <input type="text" name="variance" value=5 laceholder="variance"
-                                     th:value="${alarm.variance}"/> </label></div>
 
 
     <label>Additional notes</label><br/>
-    <textarea value="Add your notes here..." rows="7"
+    <textarea value="Add your notes here..." rows="7" cols="50"
               name="notes" field="">
     </textarea>
 
-    <div><input type="submit" value="Save Alarm"/></div>
+    <div>
+        <input class="btn btn-default" type="submit" value="Save Alarm"/>
+    <button type="submit" class="btn btn-default"
+            onclick="/app">Cancel</button>
+    <input type="hidden" class="form-control" name= "id" id="id" placeholder="id" th:value="${alarm.id}" />
+    <input type="hidden" class="form-control" name= "symbol" id="symbol" placeholder="symbol" th:value="${alarm.symbol}" />
+    </div>
 </form>
 </body>
 </html>

@@ -4,12 +4,12 @@
 <head lang="en">
     <title>Alarms List</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
     <link
             href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
-            th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
-            rel="stylesheet" media="screen" />
+            rel="stylesheet" media="screen"/>
+    <!--th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"-->
 
     <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
             th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
@@ -23,35 +23,72 @@
 
 <body>
 
+
 <div class="container">
 
-    <ul class="breadcrumb">
-        <li class="active">
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Sign Out"/>
-            </form>
-        </li>
-
-        <h1 th:inline="text">hello [[${#httpServletRequest.remoteUser}]]!</h1>
-
-    </ul>
 
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="collapse navbar-collapse">
-                <form class="navbar-form navbar-left" role="search">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="query" id="query"
-                               placeholder="Search by symbol"/>
-                    </div>
-                    <button type="submit" class="btn btn-default">Search</button>
-                </form>
 
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/app/alarm?action=add"><span
-                            class="glyphicon glyphicon-plus" aria-hidden="true">&nbspAdd alarm</span></a></li>
+    <span class="breadcrumb">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-default">Sign Out</button>
+        </form>
 
-                </ul>
+        <h1 th:inline="text">[[${#httpServletRequest.remoteUser}]]!</h1>
+
+    </span>
+
+
+
+                <span class="nav navbar-nav navbar-left">
+
+                    <form th:action="@{/app/alarm}" method="post" th:object="${alarm}">
+                        <select name="symbol" class="btn btn-default" placeholder="symbol"
+                                th:value="${alarm.symbol}">
+                            <option value="MSFT">MSFT</option>
+                            <option value="FB">FB</option>
+                            <option value="AAPL">AAPL</option>
+                            <option value="GOOGL">GOOGL</option>
+                            <option value="TWTR">TWTR</option>
+                            <option value="INTC">INTC</option>
+                            <option value="CSCO">CSCO</option>
+                            <option value="ORCL">ORCL</option>
+                            <option value="NVDA">NVDA</option>
+                            <option value="IBM">IBM</option>
+                            <option value="SAP">SAP</option>
+                            <option value="TXN">TXN</option>
+                            <option value="ADBE">ADBE</option>
+                            <option value="QCOM">QCOM</option>
+                            <option value="BIDU">BIDU</option>
+                            <option value="AABA">AABA</option>
+                            <option value="NOK">NOK</option>
+                            <option value="EA">EA</option>
+                            <option value="HPQ">HPQ</option>
+                        </select>
+                        <button type="submit" class="btn btn-default">Quick Add</button>
+                    </form>
+
+                </span>
+
+                <br><br>
+
+
+                <span>
+                </span>
+
+                <!-- TODO implement searching
+                <span class="nav navbar-nav navbar-right btn btn-default">
+
+                    <form role="search">
+                            <input type="text"  class="btn btn-default"  placeholder="Filter"/>
+                            <button type="submit" class="btn btn-default">Search</button>
+                    </form>
+                </span>
+                -->
+<br>
+
             </div>
         </div>
     </nav>
@@ -63,27 +100,29 @@
     <!-- Table -->
     <table class="table">
         <tr>
-            <th>Symbol----------</th>
-            <th>Original price--</th>
-            <th>Current price---</th>
-            <th>Variation [%]---</th>
-            <th>Target-----</th>
-            <th>Target [%]-</th>
-            <th>Active---</th>
-            <th>&nbsp;</th>
+            <th>Symbol</th>
+            <th>Original price</th>
+            <th>Current price</th>
+            <th>Variation</th>
+            <th>Variation [%]</th>
+            <th>Target</th>
+            <th>Target [+/- %]</th>
+            <th>Active</th>
+            <th>Actions</th>
         </tr>
         <tbody id="alarmsList">
         <tr th:each="alarm : ${alarmsList}">
             <td th:text="${{alarm.symbol}}"></td>
             <td th:text="${{alarm.originalValue}}"></td>
-            <td th:text="${{alarm.originalValue}}"></td>
-            <td th:text="${{alarm.originalValue-alarm.originalValue}}"></td>
+            <td th:text="${{alarm.nowValue}}"></td>
+            <td th:text="${{(alarm.nowValue - alarm.originalValue)}}"></td>
+            <td th:text="${{(alarm.nowValue - alarm.originalValue)/alarm.originalValue*100}}"></td>
             <td th:text="${{alarm.originalValue * (100 + alarm.variance)/100}}"></td>
             <td th:text="${{alarm.variance}}"></td>
             <td th:text="${{alarm.active}}"></td>
             <td>
-                <a href="/app/alarm?action=edit">edit</a>&nbsp
-                <a href="/app/alarm?action=delete">delete</a>
+                <a th:href="@{/app/alarm/(action=edit,id=${alarm.id})}" th:text="edit">&nbsp</a>
+                <a th:href="@{/app/alarm/(action=delete,id=${alarm.id})}" th:text="delete"/>
             </td>
         </tr>
         </tbody>
