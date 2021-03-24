@@ -22,7 +22,7 @@ public class StockDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(StockDAO.class);
 
     private String API_KEY = "demo";
-    private final String DEMO_SYMBOLS_SECTION = "MSFT,FB,AAPL";
+    private final String DEMO_SYMBOLS_SECTION = "MSFT"; // only one symbol function
 
     public Map<String, Double> getStockData(Collection<String> symbols) {
         LOGGER.info("Getting batch stock quote(s) for " + symbols.size() + " symbols...");
@@ -35,11 +35,13 @@ public class StockDAO {
 
         String symbolsSection = symbolsBuilder.toString();
 
-        if ("demo".equals(API_KEY)) symbolsSection = DEMO_SYMBOLS_SECTION;
+//        if ("demo".equals(API_KEY))
+        symbolsSection = DEMO_SYMBOLS_SECTION;
 
         try {
-            URL url = new URL("https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=" +
+            URL url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + // BATCH_STOCK_QUOTES function was removed from the API
                     symbolsSection +
+                    "&interval=60min" +
                     "&apikey=" + API_KEY);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -93,11 +95,16 @@ public class StockDAO {
     private Map<String, Double> extractQuotes(JsonNode rootNode) {
         Map<String, Double> result = new HashMap<>();
 
-        JsonNode stockQuotes = rootNode.get("Stock Quotes");
-        int size = stockQuotes.size();
-        for (int i = 0; i < size; i++)
-            result.put(stockQuotes.get(i).get("1. symbol").textValue(),
-                       stockQuotes.get(i).get("2. price").asDouble());
+        //deprecated by the removal of the BATCH_STOCK_QUOTES function
+//        JsonNode stockQuotes = rootNode.get("Stock Quotes");
+//        int size = stockQuotes.size();
+//        for (int i = 0; i < size; i++)
+//            result.put(stockQuotes.get(i).get("1. symbol").textValue(),
+//                       stockQuotes.get(i).get("2. price").asDouble());
+//
+        result.put(rootNode.findValue("2. Symbol").textValue(),
+                rootNode.findValue("4. close").asDouble());
+
 
         return result;
     }
