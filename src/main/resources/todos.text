@@ -1,3 +1,7 @@
 Add app self-awareness/diagnosis capabilities:
 - app components status: polling engine, db connectivity, user identification status
 - clear instructions for starting the app: environment setup( intelij, windows shell with maven)
+
+- error occurs when trying to stop the engine via /stop resource
+- create multiple threads to poll for data /with some sort of syncing mechanism in place for potential race conditions
+- add default builtin user, no need for registering a new user, that is only a showcase feature
