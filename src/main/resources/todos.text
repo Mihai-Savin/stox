@@ -1,0 +1,3 @@
+Add app self-awareness/diagnosis capabilities:
+- app components status: polling engine, db connectivity, user identification status
+- clear instructions for starting the app: environment setup( intelij, windows shell with maven)
