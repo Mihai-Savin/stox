@@ -28,4 +28,4 @@ set the apikey in the StockDAO instead of demo
 To obtain a key go to https://www.alphavantage.co/support/#api-key
 
 Due to the fact that the BATCH_STOCK_QUTES function was removed from the api,
-the app will only allow setting an alarm for a predefined shortlist of symbols( for the time being MSFT only)
+the app will only allow setting an alarm for a predefined shortlist of symbols( for the time being MICROSOFT only)
